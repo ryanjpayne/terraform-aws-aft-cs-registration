@@ -27,6 +27,7 @@ AFT Pipeline (per vended account)
 **Key design decisions:**
 
 - The Python pre-hook runs before Terraform and handles the CrowdStrike API call. Terraform never calls the CrowdStrike API directly.
+- Each account is registered individually using the CrowdStrike `CloudAWSRegistration` single-account endpoint (`POST /cloud-connect-aws/entities/account/v2`). This is distinct from CrowdStrike's organization-level registration method — accounts are registered one at a time as they are vended through AFT, not by pointing CrowdStrike at an AWS Organization root.
 - Multi-region deployments use explicit per-region module blocks (not `for_each`) because Terraform provider aliases cannot be dynamically selected. Adding a region requires uncommenting paired blocks in both `backend.tf.jinja` and `main.tf`.
 - Terraform initializes **all** declared provider aliases at startup. Aliases for AWS opt-in regions (ap-east-1, eu-south-*, etc.) must be commented out if those regions are not enabled in the target account, or AssumeRole will return a 403.
 
