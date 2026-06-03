@@ -1,0 +1,67 @@
+# ---------------------------------------------------------------------------
+# CrowdStrike AFT Setup — Example Variables
+#
+# Copy this file to terraform.tfvars and fill in your values.
+# terraform.tfvars is gitignored because it contains credentials.
+#
+# Run once against your AFT management account:
+#   cp terraform.tfvars.example terraform.tfvars
+#   # edit terraform.tfvars
+#   terraform init && terraform apply
+# ---------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------
+# Required: CrowdStrike API credentials
+# Create an API client at https://falcon.crowdstrike.com/api-clients-and-keys
+# Required scope: CSPM Registration (read + write)
+# ---------------------------------------------------------------------------
+
+falcon_client_id     = "YOUR_CLIENT_ID"
+falcon_client_secret = "YOUR_CLIENT_SECRET"
+
+# ---------------------------------------------------------------------------
+# CrowdStrike cloud region
+# us-1  — https://falcon.crowdstrike.com       (default)
+# us-2  — https://us-2.crowdstrike.com
+# eu-1  — https://eu-1.crowdstrike.com
+# us-gov — GovCloud
+# ---------------------------------------------------------------------------
+
+falcon_cloud = "us-1"
+
+# ---------------------------------------------------------------------------
+# AWS account type
+# commercial — standard AWS accounts (default)
+# gov        — GovCloud accounts
+# ---------------------------------------------------------------------------
+
+account_type = "commercial"
+
+# ---------------------------------------------------------------------------
+# Feature flags
+# Enable the Falcon features you have licensed.
+# These are stored in SSM and automatically propagated to every vended account
+# via the pipeline — you do not need to set them anywhere else.
+# ---------------------------------------------------------------------------
+
+enable_realtime_visibility    = true
+enable_idp                    = false
+enable_sensor_management      = false
+enable_dspm                   = false
+enable_vulnerability_scanning = false
+
+# ---------------------------------------------------------------------------
+# Optional: resource naming
+# Override the prefix/suffix applied to all CrowdStrike AWS resource names.
+# Defaults: prefix = "CrowdStrike-", suffix = ""
+# ---------------------------------------------------------------------------
+
+# resource_name_prefix = "CrowdStrike-"
+# resource_name_suffix = ""
+
+# ---------------------------------------------------------------------------
+# Optional: KMS key for SSM SecureString parameters
+# Defaults to the AWS-managed SSM key if not set.
+# ---------------------------------------------------------------------------
+
+# kms_key_id = "arn:aws:kms:us-east-1:123456789012:key/your-key-id"
