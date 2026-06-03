@@ -238,14 +238,12 @@ def main() -> None:
     log.info("Vended account ID: %s", account_id)
 
     # -----------------------------------------------------------------------
-    # 2. Fetch parameters from SSM (must use AFT management account profile,
-    #    not aft-target, because SSM params live in the AFT mgmt account)
+    # 2. Fetch parameters from SSM
     # -----------------------------------------------------------------------
-    # The buildspec sets AWS_PROFILE=aft-target before calling this script.
-    # SSM parameters are stored in the AFT management account, so we
-    # explicitly use the aft-management profile to read them.
-    aft_mgmt_session = boto3.Session(profile_name="aft-management")
-    ssm = aft_mgmt_session.client("ssm")
+    # The AFT pre-api-helpers phase runs in CodeBuild with the AFT management
+    # account's IAM role as the ambient credential. SSM parameters are stored
+    # in the same account, so the default session is correct — no profile needed.
+    ssm = boto3.client("ssm")
 
     client_id     = get_ssm_parameter(ssm, f"{SSM_PREFIX}/client_id")
     client_secret = get_ssm_parameter(ssm, f"{SSM_PREFIX}/client_secret")
